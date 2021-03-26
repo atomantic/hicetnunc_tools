@@ -28,6 +28,8 @@ console.log(`⚡ fetching creation info for address ${tz}...`);
     })
   );
 
+  details.sort((a, b) => (a.token_id < b.token_id ? -1 : 1));
+
   // console.log({ details });
 
   // items that are not owned by the protocol address are currently not for sale
@@ -49,8 +51,12 @@ console.log(`⚡ fetching creation info for address ${tz}...`);
       `${baseURL}${o.token_id} ${o.holders[config.protocol]}/${o.total}`
     )
   );
-  console.log(`🏷️  Owner Can List:`);
+  console.log(`🏷️  Creator Can List:`);
   canSell.forEach((o) =>
-    console.log(`${baseURL}${o.token_id} ${o.holders[tz]}/${o.total}`)
+    console.log(
+      `${baseURL}${o.token_id} ${o.holders[tz]}/${o.total} ${
+        forSale.find((s) => s.token_id === o.token_id) ? "" : "(NONE LISTED)"
+      }`
+    )
   );
 })();
