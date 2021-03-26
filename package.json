@@ -1,0 +1,23 @@
+{
+  "name": "hicetnunc_tools",
+  "version": "1.0.0",
+  "description": "Auditing, IPFS Pinning, and other tools for creators, collectors, and network support of hic et nunc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atomantic/hicetnunc_tools.git"
+  },
+  "author": "Adam Eivy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/atomantic/hicetnunc_tools/issues"
+  },
+  "homepage": "https://github.com/atomantic/hicetnunc_tools#readme",
+  "dependencies": {
+    "conseiljs": "5.0.8-1",
+    "node-fetch": "2.6.1"
+  }
+}
