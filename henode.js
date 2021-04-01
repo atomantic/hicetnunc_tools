@@ -127,6 +127,7 @@ const getNextPage = async () => {
   if (!tokens) {
     return setMonitorMode();
   }
+  const newItemsThisPage = 0;
   console.log(
     `fetched offset=${cache.offset} with ${tokens.length} tokens: ${
       tokens[tokens.length - 1].token_id
@@ -138,8 +139,17 @@ const getNextPage = async () => {
     if (cache.pinned.includes(t.token_id)) {
       // we have now reached a place in the pagination that we have
       // already pinned (everything older than this pin should already be pinned)
-      return setMonitorMode();
+      
+      // NOTE: this API is backward (new mints will shift pagination)
+      // so we can easily request a future page and get a token we've already seen :(
+      // we would like to go into monitor mode now, but we might just have hit
+      // a single token we processed last page
+      // and still need to look at the next page
+      // so instead of returning here into monitor mode, we will check to see if anything from this page was new
+      // return setMonitorMode();
+        continue;
     }
+    newItemsThisPage++;
 
     t.token_info = await getObjktMeta(
       t.extras["@@empty"].replace("ipfs://", "")
@@ -157,6 +167,9 @@ const getNextPage = async () => {
 
     if (action === "add") cache.pinned.push(t.token_id);
     else cache.unpinned.push(t.token_id);
+  }
+  if(!newItemsThisPage){
+    return setMonitorMode();
   }
   // increment page
   cache.offset += 10;
