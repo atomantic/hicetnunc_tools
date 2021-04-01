@@ -126,3 +126,5 @@ or to only cache meta (not content, which could be HUGE):
 ```
 node henode.js meta
 ```
+
+State for the HENode is stored in `./.cache.json`. To reset your history (in case you want to switch from meta-only to full node), you can delete this file and restart the node to bootstrap from the start.

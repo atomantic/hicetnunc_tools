@@ -127,7 +127,7 @@ const getNextPage = async () => {
   if (!tokens) {
     return setMonitorMode();
   }
-  const newItemsThisPage = 0;
+  let newItemsThisPage = 0;
   console.log(
     `fetched offset=${cache.offset} with ${tokens.length} tokens: ${
       tokens[tokens.length - 1].token_id
