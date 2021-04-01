@@ -174,7 +174,7 @@ const getNextPage = async () => {
   }
   // hard code hack here to only allow bootstrap status if we have pinned
   // at least 10K items to get around my own testing where I killed the bootstrap (later, we will use a better method)
-  if(!newItemsThisPage && pinned.length > 10000){
+  if(!newItemsThisPage && cache.pinned.length > 10000){
     return setMonitorMode();
   }
   // increment page
