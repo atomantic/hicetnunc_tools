@@ -24,8 +24,8 @@ const metaOnly = process.argv[2] === "meta";
 
 console.log(`Running HENode in ${metaOnly ? "meta only" : "full cache"} mode`);
 
-const pinAsHash = async (value, action) => {
-  await pin(value.replace("ipfs://", ""), action);
+const pinAsHash = async (value, action, prefix) => {
+  await pin(value.replace("ipfs://", ""), action, prefix);
 };
 
 const pinObj = async (token, action) => {
@@ -36,12 +36,12 @@ const pinObj = async (token, action) => {
   //   "@@empty": "ipfs://QmNk4MkbYo9rkwHBu1DAiQ6wGtHUzkNp1sbZpjvLLC7CoD"
   // }
   if (!metaOnly && token.token_info && token.token_info.artifactUri)
-    await pinAsHash(token.token_info.artifactUri, action);
+    await pinAsHash(token.token_info.artifactUri, action, `token:${token.token_id}-content`);
   if (!metaOnly && token.token_info && token.token_info.thumbnailUri)
-    await pinAsHash(token.token_info.thumbnailUri, action);
+    await pinAsHash(token.token_info.thumbnailUri, action, `token:${token.token_id}-thumb`);
   let extras = Object.values(token.extras);
   for (let j = 0; j < extras.length; j++) {
-    await pinAsHash(extras[j], action);
+    await pinAsHash(extras[j], action, `token:${token.token_id}-meta`);
   }
 };
 
