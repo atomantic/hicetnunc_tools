@@ -1,9 +1,13 @@
 /**
  * HENode
  * persistent process that runs an IPFS cacher for all HEN tokens
- * checks the HEN feed every 60 seconds
+ * bootstraps the whole network and then monitors new mints every 10 seconds
+ * 
+ * DRY RUN (fetch and log but do not PIN) with `DRY=true node henode.js`
+ * Full node: `node henode.js`
+ * Meta-data only node: `node henode.js meta`
  *
- * grabs blocklists to unpin kill dead items
+ * additionally grabs updated blocklists to unpin/kill blocked items
  *
  * TODO: burning is a bit tricky because a token collector could have burned a 1/100 tokens
  * so the presense of a token in the burn address does not mean they are all burned.
@@ -119,7 +123,7 @@ const setMonitorMode = async () => {
   cache.bootstrapped = true;
   // save cache history to disk for resuming
   fs.writeFileSync(cacheFile, JSON.stringify(cache));
-  return setTimeout(getNextPage, 5000);
+  return setTimeout(getNextPage, 10000);
 };
 
 const getNextPage = async () => {
@@ -129,7 +133,7 @@ const getNextPage = async () => {
   }
   let newItemsThisPage = 0;
   console.log(
-    `fetched offset=${cache.offset} with ${tokens.length} tokens: ${
+    `${cache.pinned.length} pinned items. Fetched offset=${cache.offset} with ${tokens.length} tokens: ${
       tokens[tokens.length - 1].token_id
     } - ${tokens[0].token_id}`
   );
