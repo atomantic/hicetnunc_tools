@@ -35,10 +35,10 @@ const pinObj = async (token, action) => {
   // "extras": {
   //   "@@empty": "ipfs://QmNk4MkbYo9rkwHBu1DAiQ6wGtHUzkNp1sbZpjvLLC7CoD"
   // }
-  if (!metaOnly && token.artifact_uri)
-    await pinAsHash(token.artifact_uri, action);
-  if (!metaOnly && token.thumbnail_uri)
-    await pinAsHash(token.thumbnail_uri, action);
+  if (!metaOnly && token.token_info && token.token_info.artifactUri)
+    await pinAsHash(token.token_info.artifactUri, action);
+  if (!metaOnly && token.token_info && token.token_info.thumbnailUri)
+    await pinAsHash(token.token_info.thumbnailUri, action);
   let extras = Object.values(token.extras);
   for (let j = 0; j < extras.length; j++) {
     await pinAsHash(extras[j], action);
@@ -124,7 +124,7 @@ const setMonitorMode = async () => {
 
 const getNextPage = async () => {
   const tokens = await getPlatformTokens(cache.offset);
-  if (!tokens) {
+  if (!tokens || !tokens.length) {
     return setMonitorMode();
   }
   let newItemsThisPage = 0;
