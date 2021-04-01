@@ -114,7 +114,7 @@ const updateBlockLists = async () => {
 setInterval(updateBlockLists, 60000);
 
 const setMonitorMode = async () => {
-  console.log("no new tokens to pin, awaiting new mints");
+  console.log("bootstrapped! awaiting new mints");
   cache.offset = 0;
   cache.bootstrapped = true;
   // save cache history to disk for resuming
@@ -168,7 +168,9 @@ const getNextPage = async () => {
     if (action === "add") cache.pinned.push(t.token_id);
     else cache.unpinned.push(t.token_id);
   }
-  if(!newItemsThisPage){
+  // hard code hack here to only allow bootstrap status if we have pinned
+  // at least 10K items to get around my own testing where I killed the bootstrap (later, we will use a better method)
+  if(!newItemsThisPage && pinned.length > 10000){
     return setMonitorMode();
   }
   // increment page
@@ -182,5 +184,6 @@ const getNextPage = async () => {
   // initalize the blocklists
   await updateBlockLists();
   // start the engine
-  await getNextPage();
+  if(cache.bootstrapped) setMonitorMode();
+  else getNextPage();
 })();
