@@ -22,8 +22,7 @@ const tz = process.argv[2];
 console.log(`⚡ fetching content for address ${tz}`);
 
 (async () => {
-  const oblock = await getBlockedObj();
-  const wblock = await getBlockedTz();
+  const [oblock, wblock] = await Promise.all([getBlockedObj(), getBlockedTz()]);
   const objkts = await getTZ(tz);
 
   const sanitizedList = objktSanitize(objkts).filter(filterUnique);

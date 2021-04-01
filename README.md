@@ -110,3 +110,19 @@ or edit `pin.sh` to add your own addresses and run like so:
 > - add to your shell: `export CONSEIL_KEY=YOUR_KEY_VALUE`
 > - This version also has node.js module dependencies: run `npm i`
 >   then run `node pin.conseil.js tz1iyFi4WjSttoja7Vi1EJYMEKKSebQyMkF9`
+
+## HENode
+
+A full IPFS caching node for HEN.
+
+Run like so:
+
+```
+node henode.js
+```
+
+or to only cache meta (not content, which could be HUGE):
+
+```
+node henode.js meta
+```

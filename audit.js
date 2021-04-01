@@ -5,7 +5,7 @@
  */
 const config = require("./config");
 const getHolders = require("./lib/get.holders");
-const getTokens = require("./lib/get.tokens");
+const getTokens = require("./lib/get.address.tokens");
 const reduceSum = require("./lib/reduce.sum");
 
 const tz = process.argv[2];
