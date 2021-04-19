@@ -44,6 +44,7 @@ const pinObj = async (token, action) => {
   if (!metaOnly && token.token_info && token.token_info.thumbnailUri)
     await pinAsHash(token.token_info.thumbnailUri, action, `token:${token.token_id}-thumb`);
   let extras = Object.values(token.extras);
+  // in case there are more extras later:
   for (let j = 0; j < extras.length; j++) {
     await pinAsHash(extras[j], action, `token:${token.token_id}-meta`);
   }
@@ -119,10 +120,13 @@ setInterval(updateBlockLists, 60000);
 
 const setMonitorMode = async () => {
   console.log("bootstrapped! awaiting new mints");
+  // the API is backward, so new content starts off at offset 0
   cache.offset = 0;
+  // next time we load the engine, go straight into monitor mode
   cache.bootstrapped = true;
   // save cache history to disk for resuming
   fs.writeFileSync(cacheFile, JSON.stringify(cache));
+  // check for new minted content in 10 seconds
   return setTimeout(getNextPage, 10000);
 };
 

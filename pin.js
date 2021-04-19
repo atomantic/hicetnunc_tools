@@ -58,7 +58,10 @@ console.log(`⚡ fetching content for address ${tz}`);
     )
     .filter(filterUnique);
   const blockedContentHashes = blocked
-    .map((i) => i.token_info.artifactUri.replace("ipfs://", ""))
+    .map((i) => {
+      console.log(`${i.token_id} is banned`);
+      return i.token_info.artifactUri.replace("ipfs://", "");
+    })
     .filter(filterUnique);
   const blockedThumbnailHashes = blocked
     .map((i) => i.token_info.thumbnailUri.replace("ipfs://", ""))

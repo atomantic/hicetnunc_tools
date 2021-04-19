@@ -4,6 +4,11 @@ Auditing, IPFS Pinning, and other tools for creators, collectors, and network su
 
 The preference for this repo is to not have any npm module dependencies. The current versions of tools can be run as-is without installing any dependencies (other than Node.js) or using any API keys.
 
+# Author
+
+If you are using this, hit me up on Twitter: https://twitter.com/antic
+And check out my works here: https://adameivy.com/gallery
+
 # Setup
 
 1. Git Clone this repository or download the release zip file
