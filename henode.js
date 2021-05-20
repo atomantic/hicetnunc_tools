@@ -2,7 +2,7 @@
  * HENode
  * persistent process that runs an IPFS cacher for all HEN tokens
  * bootstraps the whole network and then monitors new mints every 10 seconds
- * 
+ *
  * DRY RUN (fetch and log but do not PIN) with `DRY=true node henode.js`
  * Full node: `node henode.js`
  * Meta-data only node: `node henode.js meta`
@@ -40,9 +40,17 @@ const pinObj = async (token, action) => {
   //   "@@empty": "ipfs://QmNk4MkbYo9rkwHBu1DAiQ6wGtHUzkNp1sbZpjvLLC7CoD"
   // }
   if (!metaOnly && token.token_info && token.token_info.artifactUri)
-    await pinAsHash(token.token_info.artifactUri, action, `token:${token.token_id}-content`);
+    await pinAsHash(
+      token.token_info.artifactUri,
+      action,
+      `token:${token.token_id}-content`
+    );
   if (!metaOnly && token.token_info && token.token_info.thumbnailUri)
-    await pinAsHash(token.token_info.thumbnailUri, action, `token:${token.token_id}-thumb`);
+    await pinAsHash(
+      token.token_info.thumbnailUri,
+      action,
+      `token:${token.token_id}-thumb`
+    );
   let extras = Object.values(token.extras);
   // in case there are more extras later:
   for (let j = 0; j < extras.length; j++) {
@@ -137,9 +145,9 @@ const getNextPage = async () => {
   }
   let newItemsThisPage = 0;
   console.log(
-    `${cache.pinned.length} pinned items. Fetched offset=${cache.offset} with ${tokens.length} tokens: ${
-      tokens[tokens.length - 1].token_id
-    } - ${tokens[0].token_id}`
+    `${cache.pinned.length} pinned items. Fetched offset=${cache.offset} with ${
+      tokens.length
+    } tokens: ${tokens[tokens.length - 1].token_id} - ${tokens[0].token_id}`
   );
   for (let i = 0; i < tokens.length; i++) {
     let t = tokens[i];
@@ -147,7 +155,7 @@ const getNextPage = async () => {
     if (cache.pinned.includes(t.token_id)) {
       // we have now reached a place in the pagination that we have
       // already pinned (everything older than this pin should already be pinned)
-      
+
       // NOTE: this API is backward (new mints will shift pagination)
       // so we can easily request a future page and get a token we've already seen :(
       // we would like to go into monitor mode now, but we might just have hit
@@ -155,9 +163,14 @@ const getNextPage = async () => {
       // and still need to look at the next page
       // so instead of returning here into monitor mode, we will check to see if anything from this page was new
       // return setMonitorMode();
-        continue;
+      continue;
     }
     newItemsThisPage++;
+
+    if (!t.extras["@@empty"]) {
+      console.error(`token does not appear to have a metadata block`, t.extras);
+      continue;
+    }
 
     t.token_info = await getObjktMeta(
       t.extras["@@empty"].replace("ipfs://", "")
@@ -178,7 +191,7 @@ const getNextPage = async () => {
   }
   // hard code hack here to only allow bootstrap status if we have pinned
   // at least 10K items to get around my own testing where I killed the bootstrap (later, we will use a better method)
-  if(!newItemsThisPage && cache.pinned.length > 10000){
+  if (!newItemsThisPage && cache.pinned.length > 10000) {
     return setMonitorMode();
   }
   // increment page
@@ -192,6 +205,6 @@ const getNextPage = async () => {
   // initalize the blocklists
   await updateBlockLists();
   // start the engine
-  if(cache.bootstrapped) setMonitorMode();
+  if (cache.bootstrapped) setMonitorMode();
   else getNextPage();
 })();
