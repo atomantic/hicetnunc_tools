@@ -167,27 +167,31 @@ const getNextPage = async () => {
     }
     newItemsThisPage++;
 
-    if (!t.extras["@@empty"]) {
-      console.error(
-        `token ${t.token_id} does not appear to have a metadata block`,
-        t.extras
+    // if (!t.extras["@@empty"]) {
+    //   console.error(
+    //     `token ${t.token_id} does not appear to have a metadata block`,
+    //     t
+    //   );
+    //   continue;
+    // }
+
+    if (!t.creators && t.extras["@@empty"]) {
+      t.token_info = await getObjktMeta(
+        t.extras["@@empty"].replace("ipfs://", "")
       );
-      continue;
+      t.creators = t.token_info.creators;
     }
 
-    t.token_info = await getObjktMeta(
-      t.extras["@@empty"].replace("ipfs://", "")
-    );
     let action = "add";
     if (
       cache.blockedObj.includes(t.token_id) ||
-      cache.blockedTez.includes(t.token_info.creators[0])
+      cache.blockedTez.includes(t.creators[0])
     ) {
       console.log(`ensuring blocked token is not pinned: ${t.token_id}`);
       action = "rm";
     }
 
-    await pinObj(t, action);
+    // await pinObj(t, action);
 
     if (action === "add") cache.pinned.push(t.token_id);
     else cache.unpinned.push(t.token_id);
