@@ -168,7 +168,10 @@ const getNextPage = async () => {
     newItemsThisPage++;
 
     if (!t.extras["@@empty"]) {
-      console.error(`token does not appear to have a metadata block`, t.extras);
+      console.error(
+        `token ${t.token_id} does not appear to have a metadata block`,
+        t.extras
+      );
       continue;
     }
 
