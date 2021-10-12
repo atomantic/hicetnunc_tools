@@ -1,3 +1,11 @@
+> WARNING: THIS REPO IS DEPRECATED AND NO LONGER MAINTAINED
+
+For IPFS pinning, there is a new repo: https://github.com/atomantic/henpin
+
+For Auditing tools, check out the awesome set of options by NftBiker: https://nftbiker.xyz/
+
+> END OF MESSAGE
+
 # Hic et Nunc Tools
 
 Auditing, IPFS Pinning, and other tools for creators, collectors, and network support of Hic et Nunc.

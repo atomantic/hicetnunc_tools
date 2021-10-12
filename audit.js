@@ -15,7 +15,10 @@ const baseURL = `https://www.hicetnunc.xyz/objkt/`;
 console.log(`⚡ fetching creation info for address ${tz}...`);
 
 (async () => {
-  const { created } = await getTokens(tz);
+  const tokens = await getTokens(tz);
+  const { created } = tokens;
+
+  console.log({ tokens });
 
   const details = await Promise.all(
     created.map(async (token_id) => {
